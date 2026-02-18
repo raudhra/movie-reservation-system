@@ -3,6 +3,8 @@ package models
 import (
 	"errors"
 	"time"
+
+	"github.com/jinzhu/gorm"
 )
 
 type Movie struct {
@@ -31,4 +33,44 @@ func (m *Movie) ValidateMovie() error {
 	if m.Showtime == "" {
 		return errors.New("Showtime cannot be empty")
 	}
+}
+
+func init() {
+	config.Connect()
+	db = config.getDB()
+	db.AutoMigrate(&Book{})
+}
+
+func GetAllMovies() []Movie {
+	var Movies []Movie
+	db.Find(&Movies)
+	return Movies
+}
+
+func GetMovie(ID uint) (*Movie, *gorm.DB) {
+	var getMovie Movie
+	db := db.Where("ID=?", ID).First(&getMovie, ID)
+	return &getMovie, db
+}
+
+func DeleteMovie(ID uint) Movie {
+	var movie Movie
+	db.First(&movie, ID)
+	db.Delete(&movie)
+	return movie
+}
+
+func (m *Movie) AddMovie() *Movie {
+	db.NewRecord(m)
+	db.Create(&m)
+	return m
+}
+
+func UpdateMovie(ID uint) Movie {
+	var movie Movie
+	db.First(&movie, ID)
+	db.Delete(&movie)
+	db.NewRecord(movie)
+	db.Create(&movie)
+	return movie
 }
