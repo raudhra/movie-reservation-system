@@ -1,21 +1,23 @@
 package controllers
 
-func getAllMovies() {
+import "net/http"
+
+func getAllMovies(w http.ResponseWriter r *http.Request) {
+	
+}
+
+func getMovie(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func getMovie() {
+func addMovie(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func addMovie() {
+func updateMovie(w http.ResponseWriter,r *http.Request) {
 
 }
 
-func updateMovie() {
-
-}
-
-func deleteMovie() {
+func deleteMovie(w http.ResponseWriter,r *http.Request) {
 
 }
