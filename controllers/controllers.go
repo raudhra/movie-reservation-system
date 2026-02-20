@@ -1,6 +1,8 @@
 package controllers
 
-import "net/http"
+import ( "net/http"
+"github.com/raudhra/movie-reservation-system/models"
+)
 
 func getAllMovies(w http.ResponseWriter r *http.Request) {
 	
