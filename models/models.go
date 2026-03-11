@@ -5,20 +5,53 @@ import (
 	"time"
 
 	"github.com/jinzhu/gorm"
+	"github.com/raudhra/movie-reservation-system/config"
+)
+
+type UserRole string
+
+const (
+	RoleAdmin UserRole = "admin"
+	RoleGuest UserRole = "guest"
+)
+
+type Status string
+
+const (
+	ConfirmedStatus Status = "confirmed"
+	CancelledStatus Status = "cancelled"
 )
 
 type Movie struct {
-	ID          uint      `gorn:"primaryKey" json:"id"`
+	ID          uint      `gorm:"primaryKey" json:"id"`
 	Title       string    `gorm:"unique;not null" json:"title"`
 	Description string    `gorm:"unique;not null" json:"description"`
 	Genre       string    `gorm:"unique;not null" json:"genre"`
-	Showtime    string    `gorm:"unique;not null" json:"showtime"`
+	Duration    int       `gorm:"not null" json:"duration"`
 	CreatedAt   time.Time `json:"created_at"`
 	UpdatedAt   time.Time `json:"updated_at"`
 }
 
+type User struct {
+	Name       string    `gorm:"unique;not null" json:"name"`
+	Email      string    `gorm:"unique;not null" json:"email"`
+	Password   string    `gorm:"not null" json:"password"`
+	SignupTime time.Time `json:"signuptime"`
+	Role       UserRole  `gorm:"not null;default:guest" json:"role"`
+}
+
+type Showtime struct {
+	Showtime       string `gorm:"not null" json:"showtime"`
+	MovieID        uint   `gorm:"not null" json:"movieid"`
+	StartTime      string `gorm:"not null" json:"starttime"`
+	TotalSeats     int    `gorm:"not null" json:"totalseats"`
+	AvailableSeats int    `json:"availableseats"`
+}
+
+var db = config.getDB()
+
 func (m *Movie) ValidateMovie() error {
-	if m.Name == "" {
+	if m.Title == "" {
 		return errors.New("Title cannot be empty")
 	}
 
@@ -33,12 +66,14 @@ func (m *Movie) ValidateMovie() error {
 	if m.Showtime == "" {
 		return errors.New("Showtime cannot be empty")
 	}
+
+	return nil
 }
 
 func init() {
 	config.Connect()
 	db = config.getDB()
-	db.AutoMigrate(&Book{})
+	db.AutoMigrate(&Movie{})
 }
 
 func GetAllMovies() []Movie {
@@ -66,11 +101,9 @@ func (m *Movie) AddMovie() *Movie {
 	return m
 }
 
-func UpdateMovie(ID uint) Movie {
+func UpdateMovie(ID uint, updatedMovie Movie) Movie {
 	var movie Movie
 	db.First(&movie, ID)
-	db.Delete(&movie)
-	db.NewRecord(movie)
-	db.Create(&movie)
+	db.Model(&movie).Updates(updatedMovie)
 	return movie
 }
