@@ -6,7 +6,6 @@ import (
 
 	"github.com/jinzhu/gorm"
 	"github.com/joho/godotenv"
-	"github.com/jinzhu/gorm/dialects/postgres"
 )
 
 type config struct {
