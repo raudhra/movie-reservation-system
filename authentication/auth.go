@@ -1,7 +1,30 @@
 package authentication
 
-type MapClaims map[string]any
+import (
+	"os"
+	"time"
 
-func auth() {
+	"github.com/golang-jwt/jwt/v5"
+)
 
+type MyCustomClaims struct {
+	Email  string `json:"email"`
+	UserID int    `json:"userid"`
+	jwt.RegisteredClaims
+}
+
+func GenerateToken(userID int, email string) (string, error) {
+	claims := MyCustomClaims{
+		email,
+		userID,
+		jwt.RegisteredClaims{
+			ExpiresAt: jwt.NewNumericDate(time.Now().Add(24 * time.Hour)),
+		},
+	}
+	SigningKeyString := os.Getenv("JWT_SECRET")
+	mySigningKey := []byte(SigningKeyString)
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	signature, err := token.SignedString(mySigningKey)
+	SignedString := string(signature)
+	return SignedString, err
 }
