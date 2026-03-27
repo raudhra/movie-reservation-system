@@ -7,7 +7,7 @@ import (
 	"github.com/raudhra/movie-reservation-system/middleware"
 )
 
-func routes() {
+func routes() *gin.Engine {
 	router := gin.Default()
 	router.POST("/register", register)
 	router.POST("/login", login)
@@ -24,6 +24,7 @@ func routes() {
 	}
 	admin := router.Group("/admin")
 	admin.Use(middleware.AuthMiddleware(signingKey))
+	admin.Use(AdminOnly())
 	{
 		admin.GET("/movies", getAllMovies)
 		admin.GET("/movies/:id", getMovie)
@@ -37,5 +38,5 @@ func routes() {
 		admin.PUT("/showtime/:id", updateShowtime)
 		admin.DELETE("/showtime/:id", deleteShowtime)
 	}
-	return *gin.Engine
+	return router
 }

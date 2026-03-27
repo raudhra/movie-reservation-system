@@ -50,6 +50,7 @@ func AuthMiddleware(secretKey string) gin.HandlerFunc {
 		if claims, ok := token.Claims.(*authentication.MyCustomClaims); ok {
 			c.Set("userID", claims.UserID)
 			c.Set("email", claims.Email)
+			c.Set("role", claims.Role)
 		}
 
 		c.Next()
