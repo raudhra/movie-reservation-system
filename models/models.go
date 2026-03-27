@@ -25,8 +25,8 @@ const (
 type Movie struct {
 	ID          uint      `gorm:"primaryKey" json:"id"`
 	Title       string    `gorm:"unique;not null" json:"title"`
-	Description string    `gorm:"unique;not null" json:"description"`
-	Genre       string    `gorm:"unique;not null" json:"genre"`
+	Description string    `gorm:"not null" json:"description"`
+	Genre       string    `gorm:"not null" json:"genre"`
 	Duration    int       `gorm:"not null" json:"duration"`
 	CreatedAt   time.Time `json:"created_at"`
 	UpdatedAt   time.Time `json:"updated_at"`
@@ -42,14 +42,22 @@ type User struct {
 }
 
 type Showtime struct {
-	Showtime       string `gorm:"not null" json:"showtime"`
-	MovieID        uint   `gorm:"not null" json:"movieid"`
-	StartTime      string `gorm:"not null" json:"starttime"`
-	TotalSeats     int    `gorm:"not null" json:"totalseats"`
-	AvailableSeats int    `json:"availableseats"`
+	ID             uint      `gorm:"primaryKey" json:"id"`
+	MovieID        uint      `gorm:"not null" json:"movieid"`
+	StartTime      time.Time `gorm:"not null" json:"starttime"`
+	TotalSeats     int       `gorm:"not null" json:"totalseats"`
+	AvailableSeats int       `json:"availableseats"`
 }
 
-var db = config.getDB()
+type Reservation struct {
+	ID         uint   `gorm:"primaryKey" json:"id"`
+	ShowtimeID uint   `gorm:"uniqueIndex:composites;not null" json:"showtimeid"`
+	UserID     uint   `gorm:"not null" json:"userid"`
+	SeatNumber int    `gorm:"uniqueIndex:composites" json:"seatnumber"`
+	Status     Status `gorm:"not null" json:"status"`
+}
+
+var db *gorm.DB
 
 func (m *Movie) ValidateMovie() error {
 	if m.Title == "" {
@@ -64,17 +72,18 @@ func (m *Movie) ValidateMovie() error {
 		return errors.New("Genre cannot be empty")
 	}
 
-	if m.Showtime == "" {
-		return errors.New("Showtime cannot be empty")
-	}
-
 	return nil
 }
 
 func init() {
 	config.Connect()
 	db = config.getDB()
-	db.AutoMigrate(&Movie{})
+	db.AutoMigrate(
+		&Movie{},
+		&User{},
+		&Showtime{},
+		&Reservation{},
+	)
 }
 
 func GetAllMovies() []Movie {
@@ -97,7 +106,6 @@ func DeleteMovie(ID uint) Movie {
 }
 
 func (m *Movie) AddMovie() *Movie {
-	db.NewRecord(m)
 	db.Create(&m)
 	return m
 }
