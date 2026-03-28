@@ -116,3 +116,14 @@ func UpdateMovie(ID uint, updatedMovie Movie) Movie {
 	db.Model(&movie).Updates(updatedMovie)
 	return movie
 }
+
+func GetUserByEmail(Email string) *User {
+	var user User
+	db.Where("email=?", Email).First(&user)
+	return &user
+}
+
+func (u *User) CreateUser() *User {
+	db.Create(&u)
+	return u
+}
