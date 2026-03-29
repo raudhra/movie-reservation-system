@@ -8,8 +8,8 @@ import (
 )
 
 func getAllShowtimes(c *gin.Context) {
-	movies := models.GetAllMovies()
-	c.JSON(http.StatusOK, movies)
+	showtimes := models.GetAllShowtimes()
+	c.JSON(http.StatusOK, showtimes)
 }
 
 func getShowtime(c *gin.Context) {
@@ -21,19 +21,19 @@ func getShowtime(c *gin.Context) {
 		})
 		return
 	}
-	movie := models.GetMovie(uint(intId))
-	c.JSON(http.StatusOK, movie)
+	showtime := models.GetShowtime(uint(intId))
+	c.JSON(http.StatusOK, showtime)
 }
 
 func addShowtime(c *gin.Context) {
-	model := models.Movie{}
+	model := models.Showtimes{}
 	if err := c.ShouldBindJSON(&model); err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
 			"error": "Error parsing movie to json",
 		})
 		return
 	}
-	model.AddMovie()
+	model.AddShowtime()
 	c.JSON(http.StatusCreated, model)
 }
 
@@ -46,14 +46,14 @@ func updateShowtime(c *gin.Context) {
 		})
 		return
 	}
-	model := models.Movie{}
+	model := models.Showtimes{}
 	if err := c.ShouldBindJSON(&model); err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
 			"error": "Error parsing movie to json",
 		})
 		return
 	}
-	updated := models.UpdateMovie(uint(intId), model)
+	updated := models.UpdateShowtime(uint(intId), model)
 	c.JSON(http.StatusOK, updated)
 }
 
@@ -66,6 +66,6 @@ func deleteShowtime(c *gin.Context) {
 		})
 		return
 	}
-	movie := models.DeleteMovie(uint(intId))
-	c.JSON(http.StatusOK, movie)
+	showtime := models.DeleteShowtime(uint(intId))
+	c.JSON(http.StatusOK, showtime)
 }
