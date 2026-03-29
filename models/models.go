@@ -158,3 +158,12 @@ func DeleteShowtime(ID uint) *Showtimes {
 	db.Delete(&showtime)
 	return &showtime
 }
+
+func CheckOverlap(movieID uint, startTime time.Time) bool {
+	var count int64
+	db.Model(&Showtimes{}).
+		Joins("join movies on movies.id = showtimes.movie_id").
+		Where("showtimes.movie_id = ? AND ? >= showtimes.start_time AND ? < showtimes.start_time + (movies.duration * interval '1 minute')", movieID, startTime, startTime).
+		Count(&count)
+	return count > 0
+}
