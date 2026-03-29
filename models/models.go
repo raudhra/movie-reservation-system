@@ -41,7 +41,7 @@ type User struct {
 	Role       UserRole  `gorm:"not null;default:guest" json:"role"`
 }
 
-type Showtime struct {
+type Showtimes struct {
 	ID             uint      `gorm:"primaryKey" json:"id"`
 	MovieID        uint      `gorm:"not null" json:"movieid"`
 	StartTime      time.Time `gorm:"not null" json:"starttime"`
@@ -81,7 +81,7 @@ func init() {
 	db.AutoMigrate(
 		&Movie{},
 		&User{},
-		&Showtime{},
+		&Showtimes{},
 		&Reservation{},
 	)
 }
@@ -126,4 +126,35 @@ func GetUserByEmail(Email string) *User {
 func (u *User) CreateUser() *User {
 	db.Create(&u)
 	return u
+}
+
+func GetAllShowtimes() []Showtimes {
+	var Showtime []Showtimes
+	db.Find(&Showtime)
+	return Showtime
+}
+
+func GetShowtime(ID uint) (*Showtimes, *gorm.DB) {
+	var getShowtime Showtimes
+	db := db.Where("ID=?", ID).First(&getShowtime, ID)
+	return &getShowtime, db
+}
+
+func (s *Showtimes) AddShowtime() *Showtimes {
+	db.Create(&s)
+	return s
+}
+
+func UpdateShowtime(ID uint, updatedShowtime Showtimes) *Showtimes {
+	var showtime Showtimes
+	db.First(&showtime, ID)
+	db.Model(&showtime).Updates(updatedShowtime)
+	return &showtime
+}
+
+func DeleteShowtime(ID uint) *Showtimes {
+	var showtime Showtimes
+	db.First(&showtime, ID)
+	db.Delete(&showtime)
+	return &showtime
 }

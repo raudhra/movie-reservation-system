@@ -18,8 +18,8 @@ func routes() *gin.Engine {
 	{
 		user.GET("/movies", getAllMovies)
 		user.GET("/movies/:id", getMovie)
-		user.GET("/showtimes", getshowtime)
-		user.GET("/showtimes/:id", getshowtime)
+		user.GET("/showtimes", getAllShowtime)
+		user.GET("/showtimes/:id", getShowtime)
 		user.POST("/reservations", reservation)
 	}
 	admin := router.Group("/admin")
