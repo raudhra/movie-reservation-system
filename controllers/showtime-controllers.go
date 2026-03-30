@@ -33,6 +33,13 @@ func addShowtime(c *gin.Context) {
 		})
 		return
 	}
+	condition := model.CheckOverlap(model.ID, model.StartTime)
+	if condition == true {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"error": "There already is an existing showtime in this timeframe",
+		})
+		return
+	}
 	model.AddShowtime()
 	c.JSON(http.StatusCreated, model)
 }

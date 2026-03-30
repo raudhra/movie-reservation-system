@@ -167,3 +167,34 @@ func CheckOverlap(movieID uint, startTime time.Time) bool {
 		Count(&count)
 	return count > 0
 }
+
+func GetAllReservation() []Reservation {
+	var Reservations []Reservation
+	db.Find(&Reservations)
+	return Reservations
+}
+
+func GetUserReservation(ID uint) (*Reservation, *gorm.DB) {
+	var getUserReservation Reservation
+	db := db.Where("ID=?", ID).First(&getUserReservation, ID)
+	return &getUserReservation, db
+}
+
+func (r *Reservation) CreateReservation() *Reservation {
+	db.Create(&r)
+	return r
+}
+
+func UpdateReservation(ID uint, updatedReservation Reservation) *Reservation {
+	var reservation Reservation
+	db.First(&reservation, ID)
+	db.Model(&reservation).Updates(updatedReservation)
+	return &reservation
+}
+
+func CancelReservation(ID uint) *Reservation {
+	var reservation Reservation
+	db.First(&reservation, ID)
+	db.Delete(&reservation)
+	return &reservation
+}
