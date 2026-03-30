@@ -141,6 +141,7 @@ func GetShowtime(ID uint) (*Showtimes, *gorm.DB) {
 }
 
 func (s *Showtimes) AddShowtime() *Showtimes {
+	s.AvailableSeats = s.TotalSeats
 	db.Create(&s)
 	return s
 }
@@ -174,13 +175,16 @@ func GetAllReservation() []Reservation {
 	return Reservations
 }
 
-func GetUserReservation(ID uint) (*Reservation, *gorm.DB) {
-	var getUserReservation Reservation
-	db := db.Where("ID=?", ID).First(&getUserReservation, ID)
-	return &getUserReservation, db
+func GetUserReservation(userID uint) []Reservation {
+	var getUserReservations []Reservation
+	db.Where("user_id=?", userID).Find(&getUserReservations)
+	return getUserReservations
 }
 
 func (r *Reservation) CreateReservation() *Reservation {
+	var showtime Showtimes
+	db.First(&showtime, r.ShowtimeID)
+	db.Model(&showtime).Update("available_seats", showtime.AvailableSeats-1)
 	db.Create(&r)
 	return r
 }
@@ -194,7 +198,10 @@ func UpdateReservation(ID uint, updatedReservation Reservation) *Reservation {
 
 func CancelReservation(ID uint) *Reservation {
 	var reservation Reservation
+	var showtime Showtimes
 	db.First(&reservation, ID)
+	db.First(&showtime, reservation.ShowtimeID)
 	db.Delete(&reservation)
+	db.Model(&showtime).Update("available_seats", showtime.AvailableSeats+1)
 	return &reservation
 }
