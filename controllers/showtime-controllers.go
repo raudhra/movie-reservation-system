@@ -29,7 +29,7 @@ func addShowtime(c *gin.Context) {
 	model := models.Showtimes{}
 	if err := c.ShouldBindJSON(&model); err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
-			"error": "Error parsing movie to json",
+			"error": "Error parsing showtime to json",
 		})
 		return
 	}
@@ -56,7 +56,7 @@ func updateShowtime(c *gin.Context) {
 	model := models.Showtimes{}
 	if err := c.ShouldBindJSON(&model); err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
-			"error": "Error parsing movie to json",
+			"error": "Error parsing showtime to json",
 		})
 		return
 	}
