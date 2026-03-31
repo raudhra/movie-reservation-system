@@ -180,6 +180,11 @@ func GetUserReservation(userID uint) []Reservation {
 	db.Where("user_id=?", userID).Find(&getUserReservations)
 	return getUserReservations
 }
+func GetReservation(ID uint) (*Reservation, *gorm.DB) {
+	var getReservation Reservation
+	db := db.Where("ID=?", ID).First(&getReservation, ID)
+	return &getReservation, db
+}
 
 func (r *Reservation) CreateReservation() *Reservation {
 	var showtime Showtimes
