@@ -3,9 +3,6 @@ package routes
 import (
 	"os"
 
-	"command-line-arguments/home/raudhra/Documents/Go Lang/Movie Reservation System/controllers/controllers.go"
-	controllers "command-line-arguments/home/raudhra/Documents/Go Lang/Movie Reservation System/controllers/reservation-controllers.go"
-
 	"github.com/gin-gonic/gin"
 	"github.com/raudhra/movie-reservation-system/controllers"
 	"github.com/raudhra/movie-reservation-system/middleware"
@@ -27,7 +24,6 @@ func routes() *gin.Engine {
 		user.POST("/reservations", controllers.CreateReservation)
 		user.GET("/reservations/:id", controllers.GetUserReservations)
 		user.DELETE("/reservations/:id", controllers.CancelReservation)
-		user.GET("/reservations/:id", controllers.)
 	}
 	admin := router.Group("/admin")
 	admin.Use(middleware.AuthMiddleware(signingKey))
@@ -47,8 +43,7 @@ func routes() *gin.Engine {
 		admin.GET("/reservations", controllers.GetAllReservation)
 		admin.GET("/reservations/:id", controllers.GetUserReservations)
 		admin.PUT("/reservations/:id", controllers.UpdateReservation)
-		admin.DELETE("/reservations/:id", controllers.CancelReservations)
-
+		admin.DELETE("/reservations/:id", controllers.CancelReservation)
 
 	}
 	return router
