@@ -7,12 +7,12 @@ import (
 	"github.com/raudhra/movie-reservation-system/models"
 )
 
-func getAllShowtimes(c *gin.Context) {
+func GetAllShowtimes(c *gin.Context) {
 	showtimes := models.GetAllShowtimes()
 	c.JSON(http.StatusOK, showtimes)
 }
 
-func getShowtime(c *gin.Context) {
+func GetShowtime(c *gin.Context) {
 	id := c.Param("id")
 	intId, err := strconv.Atoi(id)
 	if err != nil {
@@ -25,7 +25,7 @@ func getShowtime(c *gin.Context) {
 	c.JSON(http.StatusOK, showtime)
 }
 
-func addShowtime(c *gin.Context) {
+func AddShowtime(c *gin.Context) {
 	model := models.Showtimes{}
 	if err := c.ShouldBindJSON(&model); err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
@@ -44,7 +44,7 @@ func addShowtime(c *gin.Context) {
 	c.JSON(http.StatusCreated, model)
 }
 
-func updateShowtime(c *gin.Context) {
+func UpdateShowtime(c *gin.Context) {
 	id := c.Param("id")
 	intId, err := strconv.Atoi(id)
 	if err != nil {
@@ -64,7 +64,7 @@ func updateShowtime(c *gin.Context) {
 	c.JSON(http.StatusOK, updated)
 }
 
-func deleteShowtime(c *gin.Context) {
+func DeleteShowtime(c *gin.Context) {
 	id := c.Param("id")
 	intId, err := strconv.Atoi(id)
 	if err != nil {

@@ -8,7 +8,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-func register(c *gin.Context) {
+func Register(c *gin.Context) {
 	user := models.User{}
 	if err := c.ShouldBindJSON(&user); err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
@@ -36,7 +36,7 @@ func register(c *gin.Context) {
 
 }
 
-func login(c *gin.Context) {
+func Login(c *gin.Context) {
 	user := models.User{}
 	if err := c.ShouldBindJSON(&user); err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{

@@ -8,19 +8,19 @@ import (
 	"github.com/raudhra/movie-reservation-system/models"
 )
 
-func getAllReservation(c *gin.Context) {
+func GetAllReservation(c *gin.Context) {
 	reservations := models.GetAllReservation()
 	c.JSON(http.StatusOK, reservations)
 }
 
-func getUserReservations(c *gin.Context) {
+func GetUserReservations(c *gin.Context) {
 	userId, _ := c.Get("userID")
 	id := userId.(uint)
 	reservations := models.GetUserReservation(uint(id))
 	c.JSON(http.StatusOK, reservations)
 }
 
-func createReservation(c *gin.Context) {
+func CreateReservation(c *gin.Context) {
 	model := models.Reservation{}
 	if err := c.ShouldBindJSON(&model); err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
@@ -40,7 +40,7 @@ func createReservation(c *gin.Context) {
 	c.JSON(http.StatusCreated, model)
 }
 
-func updateReservation(c *gin.Context) {
+func UpdateReservation(c *gin.Context) {
 	id := c.Param("id")
 	intId, err := strconv.Atoi(id)
 	if err != nil {
@@ -60,7 +60,7 @@ func updateReservation(c *gin.Context) {
 	c.JSON(http.StatusOK, updated)
 }
 
-func cancelReservation(c *gin.Context) {
+func CancelReservation(c *gin.Context) {
 	id := c.Param("id")
 	intId, err := strconv.Atoi(id)
 	if err != nil {
