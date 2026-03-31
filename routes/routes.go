@@ -8,7 +8,7 @@ import (
 	"github.com/raudhra/movie-reservation-system/middleware"
 )
 
-func routes() *gin.Engine {
+func SetupRoutes() *gin.Engine {
 	router := gin.Default()
 	router.POST("/register", controllers.Register)
 	router.POST("/login", controllers.Login)
