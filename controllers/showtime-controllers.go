@@ -22,7 +22,7 @@ func GetShowtime(c *gin.Context) {
 		})
 		return
 	}
-	showtime := models.GetShowtime(uint(intId))
+	showtime, _ := models.GetShowtime(uint(intId))
 	c.JSON(http.StatusOK, showtime)
 }
 
@@ -34,7 +34,7 @@ func AddShowtime(c *gin.Context) {
 		})
 		return
 	}
-	condition := model.CheckOverlap(model.ID, model.StartTime)
+	condition := models.CheckOverlap(model.MovieID, model.StartTime)
 	if condition == true {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
 			"error": "There already is an existing showtime in this timeframe",
