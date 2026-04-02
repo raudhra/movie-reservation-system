@@ -19,10 +19,10 @@ func SetupRoutes() *gin.Engine {
 	{
 		user.GET("/movies", controllers.GetAllMovies)
 		user.GET("/movies/:id", controllers.GetMovie)
-		user.GET("/showtimes", controllers.GetAllShowtime)
+		user.GET("/showtimes", controllers.GetAllShowtimes)
 		user.GET("/showtimes/:id", controllers.GetShowtime)
 		user.POST("/reservations", controllers.CreateReservation)
-		user.GET("/reservations/:id", controllers.GetUserReservations)
+		user.GET("/reservations", controllers.GetUserReservations)
 		user.DELETE("/reservations/:id", controllers.CancelReservation)
 	}
 	admin := router.Group("/admin")

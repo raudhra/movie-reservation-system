@@ -94,7 +94,7 @@ func GetAllMovies() []Movie {
 
 func GetMovie(ID uint) (*Movie, *gorm.DB) {
 	var getMovie Movie
-	db := db.Where("ID=?", ID).First(&getMovie, ID)
+	db.First(&getMovie, ID)
 	return &getMovie, db
 }
 
@@ -136,7 +136,7 @@ func GetAllShowtimes() []Showtimes {
 
 func GetShowtime(ID uint) (*Showtimes, *gorm.DB) {
 	var getShowtime Showtimes
-	db := db.Where("ID=?", ID).First(&getShowtime, ID)
+	db.First(&getShowtime, ID)
 	return &getShowtime, db
 }
 
@@ -182,7 +182,7 @@ func GetUserReservation(userID uint) []Reservation {
 }
 func GetReservation(ID uint) (*Reservation, *gorm.DB) {
 	var getReservation Reservation
-	db := db.Where("ID=?", ID).First(&getReservation, ID)
+	db.First(&getReservation, ID)
 	return &getReservation, db
 }
 
