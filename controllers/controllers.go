@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/gin-gonic/gin"
 	"github.com/raudhra/movie-reservation-system/models"
 )
 
@@ -21,7 +22,7 @@ func GetMovie(c *gin.Context) {
 		})
 		return
 	}
-	movie := models.GetMovie(uint(intId))
+	movie, _ := models.GetMovie(uint(intId))
 	c.JSON(http.StatusOK, movie)
 }
 
