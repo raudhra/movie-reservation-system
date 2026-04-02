@@ -14,7 +14,7 @@ type MyCustomClaims struct {
 	jwt.RegisteredClaims
 }
 
-func GenerateToken(userID int, email string, role string) (string, error) {
+func GenerateToken(userID uint, email string, role string) (string, error) {
 	claims := MyCustomClaims{
 		email,
 		userID,
