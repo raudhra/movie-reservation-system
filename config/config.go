@@ -6,7 +6,6 @@ import (
 
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
-	"github.com/joho/godotenv"
 )
 
 type config struct {
@@ -18,11 +17,6 @@ type config struct {
 var db *gorm.DB
 
 func LoadConfig() *config {
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Error loading the env file")
-	}
-
 	return &config{
 		DatabaseURL: getEnv("DATABASE_URL", "postgres://postgres:2645@localhost:5432/movie-reservation-system?sslmode=disable"),
 		App_Port:    getEnv("APP_PORT", "8080"),

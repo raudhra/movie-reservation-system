@@ -3,6 +3,7 @@ package controllers
 import (
 	"net/http"
 
+	"github.com/gin-gonic/gin"
 	"github.com/raudhra/movie-reservation-system/authentication"
 	"github.com/raudhra/movie-reservation-system/models"
 	"golang.org/x/crypto/bcrypt"
@@ -57,7 +58,7 @@ func Login(c *gin.Context) {
 		})
 		return
 	}
-	token, err := authentication.GenerateToken(existing.ID, existing.Email, existing.Role)
+	token, err := authentication.GenerateToken(existing.ID, existing.Email, string(existing.Role))
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusConflict, gin.H{
 			"error": "Unable to generate JWT token",
